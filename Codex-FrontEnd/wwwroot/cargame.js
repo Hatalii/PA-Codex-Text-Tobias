@@ -69,14 +69,14 @@ window.carGame = {
         function spawnEnemy() {
             const isTruck = Math.random() < 0.1; // rare truck
             const height = isTruck ? carHeight * 1.5 : carHeight;
-            enemies.push({ lane: lastSpawnLane, y: -height, type: isTruck ? 'truck' : 'car', height: height });
+            var rand = Math.random() * laneCount;
+            var laneSpawn = Math.floor(rand);
+            if (laneSpawn == lastSpawnLane)
+                laneSpawn = Math.floor(Math.random() * laneCount);
 
-            if (repeatLane) {
-                repeatLane = false;
-            } else {
-                lastSpawnLane = Math.floor(Math.random() * laneCount);
-                repeatLane = true;
-            }
+            enemies.push({ lane: laneSpawn, y: -height, type: isTruck ? 'truck' : 'car', height: height });
+
+            lastSpawnLane = laneSpawn; 
         }
 
         function update(delta) {
