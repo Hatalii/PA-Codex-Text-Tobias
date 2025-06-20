@@ -13,6 +13,7 @@ window.carGame = {
         let carY;
         const enemies = [];
         let lastSpawn = 0;
+        let lastSpawnLane = Math.floor(Math.random() * laneCount);
 
         function resize() {
             const rect = canvas.getBoundingClientRect();
@@ -53,14 +54,21 @@ window.carGame = {
         }
 
         function drawEnemies() {
-            ctx.fillStyle = 'red';
             for (const e of enemies) {
-                ctx.fillRect(laneCenter(e.lane), e.y, carWidth, carHeight);
+                if (e.type === 'truck') {
+                    ctx.fillStyle = 'orange';
+                    ctx.fillRect(laneCenter(e.lane), e.y, carWidth, e.height);
+                } else {
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(laneCenter(e.lane), e.y, carWidth, e.height);
+                }
             }
         }
 
         function spawnEnemy() {
-            enemies.push({ lane: Math.floor(Math.random() * laneCount), y: -carHeight });
+            const isTruck = Math.random() < 0.1; // rare truck
+            const height = isTruck ? carHeight * 1.5 : carHeight;
+            enemies.push({ lane: lastSpawnLane, y: -height, type: isTruck ? 'truck' : 'car', height: height });
         }
 
         function update(delta) {
