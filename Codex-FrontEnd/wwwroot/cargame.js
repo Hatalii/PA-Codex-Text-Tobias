@@ -1,9 +1,21 @@
 window.carGame = {
-    init: function(canvasId) {
+    init: function (canvasId) {
         const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext('2d');
-        const state = { x: canvas.width / 2 - 10, y: canvas.height - 60, w: 20, h: 40 };
-        const road = { x: canvas.width / 2 - 50, width: 100 };
+
+        const laneCount = 6;
+        const laneWidth = canvas.width / laneCount;
+        const carWidth = laneWidth * 0.6;
+        const carHeight = carWidth * 1.2;
+
+        const state = { lane: Math.floor(laneCount / 2) };
+        const road = { x: 0, width: canvas.width };
+        const carY = canvas.height - carHeight - 20;
+
+        function laneCenter(lane) {
+            return lane * laneWidth + laneWidth / 2 - carWidth / 2;
+        }
+
 
         function drawRoad() {
             ctx.fillStyle = 'green';
@@ -12,30 +24,31 @@ window.carGame = {
             ctx.fillRect(road.x, 0, road.width, canvas.height);
             ctx.strokeStyle = 'white';
             ctx.lineWidth = 2;
-            ctx.setLineDash([10, 10]);
-            ctx.beginPath();
-            ctx.moveTo(road.x + road.width / 2, 0);
-            ctx.lineTo(road.x + road.width / 2, canvas.height);
-            ctx.stroke();
+            ctx.setLineDash([15, 15]);
+            for (let i = 1; i < laneCount; i++) {
+                ctx.beginPath();
+                ctx.moveTo(road.x + i * laneWidth, 0);
+                ctx.lineTo(road.x + i * laneWidth, canvas.height);
+                ctx.stroke();
+            }
             ctx.setLineDash([]);
         }
 
         function drawCar() {
             ctx.fillStyle = 'blue';
-            ctx.fillRect(state.x, state.y, state.w, state.h);
+            ctx.fillRect(laneCenter(state.lane), carY, carWidth, carHeight);
         }
 
         function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             drawRoad();
             drawCar();
         }
 
         function handleKey(e) {
-            const step = 5;
-            if (e.key === 'ArrowUp') state.y -= step;
-            if (e.key === 'ArrowDown') state.y += step;
-            if (e.key === 'ArrowLeft') state.x -= step;
-            if (e.key === 'ArrowRight') state.x += step;
+            if (e.key === 'ArrowLeft') state.lane = Math.max(0, state.lane - 1);
+            if (e.key === 'ArrowRight') state.lane = Math.min(laneCount - 1, state.lane + 1);
             draw();
         }
 
