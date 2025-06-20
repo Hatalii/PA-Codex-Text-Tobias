@@ -3,6 +3,12 @@
 @inject IJSRuntime JS
 
 <canvas id="car-canvas" class="car-canvas" tabindex="0"></canvas>
+<div id="reset-overlay" class="reset-overlay">
+    <div class="reset-content">
+        <p>Collision! Reset game?</p>
+        <button id="reset-button" class="btn btn-primary">Reset</button>
+    </div>
+</div>
 <script src="cargame.js"></script>
 
 @code {
