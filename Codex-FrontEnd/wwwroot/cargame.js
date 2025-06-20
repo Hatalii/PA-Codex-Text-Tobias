@@ -5,7 +5,15 @@ window.carGame = {
 
         const overlay = document.getElementById('reset-overlay');
         const resetButton = document.getElementById('reset-button');
+        const scoreDisplay = document.getElementById('score-display');
+        const leaderboardDiv = document.getElementById('leaderboard');
+        const nameInput = document.getElementById('name-input');
+        const submitScoreButton = document.getElementById('submit-score');
+        const collisionText = document.getElementById('collision-text');
+
         let gamePaused = false;
+        let score = 0;
+        let scoreInterval;
 
         const laneCount = 6;
         let laneWidth;
@@ -83,6 +91,25 @@ window.carGame = {
             return false;
         }
 
+        function updateLeaderboard() {
+            const scores = JSON.parse(localStorage.getItem('scores') || '[]');
+            leaderboardDiv.innerHTML = scores
+                .map(s => `<div>${s.name}: ${s.score}</div>`)
+                .join('');
+        }
+
+        function startScoring() {
+            score = 0;
+            scoreDisplay.textContent = 'Score: 0';
+            clearInterval(scoreInterval);
+            scoreInterval = setInterval(() => {
+                if (!gamePaused) {
+                    score += 2;
+                    scoreDisplay.textContent = `Score: ${score}`;
+                }
+            }, 1000);
+        }
+
         function resetGame() {
             enemies.length = 0;
             state.lane = Math.floor(laneCount / 2);
@@ -90,6 +117,8 @@ window.carGame = {
             gamePaused = false;
             lastSpawn = performance.now();
             lastTime = performance.now();
+            startScoring();
+            canvas.focus();
             requestAnimationFrame(gameLoop);
         }
 
@@ -135,9 +164,20 @@ window.carGame = {
 
         canvas.addEventListener('keydown', handleKey);
         resetButton.addEventListener('click', resetGame);
+        submitScoreButton.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (!name) return;
+            const scores = JSON.parse(localStorage.getItem('scores') || '[]');
+            scores.push({ name, score });
+            localStorage.setItem('scores', JSON.stringify(scores));
+            updateLeaderboard();
+            submitScoreButton.disabled = true;
+        });
         window.addEventListener('resize', resize);
 
         resize();
+        updateLeaderboard();
+        startScoring();
         canvas.focus();
 
         let lastTime = performance.now();
@@ -156,6 +196,9 @@ window.carGame = {
 
             update(delta);
             if (checkCollision()) {
+                collisionText.textContent = `Collision! Your score: ${score}. Reset game?`;
+                nameInput.value = '';
+                submitScoreButton.disabled = false;
                 overlay.style.display = 'flex';
                 gamePaused = true;
                 return;

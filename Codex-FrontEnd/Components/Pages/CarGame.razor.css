@@ -23,3 +23,25 @@
     border-radius: 4px;
     text-align: center;
 }
+
+.reset-content input {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.score-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    text-align: right;
+}
+
+.score-display {
+    font-weight: bold;
+}
+
+.leaderboard {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
