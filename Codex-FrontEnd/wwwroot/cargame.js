@@ -16,6 +16,7 @@ window.carGame = {
             return lane * laneWidth + laneWidth / 2 - carWidth / 2;
         }
 
+
         function drawRoad() {
             ctx.fillStyle = 'green';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -40,6 +41,7 @@ window.carGame = {
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             drawRoad();
             drawCar();
         }
