@@ -1,0 +1,17 @@
+@page "/car"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<h1>Car Game</h1>
+<canvas id="car-canvas" width="400" height="400" style="border:1px solid #000" tabindex="0"></canvas>
+<script src="cargame.js"></script>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("carGame.init", "car-canvas");
+        }
+    }
+}

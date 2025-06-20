@@ -1,0 +1,13 @@
+.game-header {
+    padding: 0.5rem 0;
+}
+
+.game-header ::deep .game-link {
+    margin-right: 1rem;
+    text-decoration: none;
+    color: #333;
+}
+
+.game-header ::deep .active {
+    font-weight: bold;
+}
