@@ -3,9 +3,15 @@
 @inject IJSRuntime JS
 
 <canvas id="car-canvas" class="car-canvas" tabindex="0"></canvas>
+<div class="score-panel">
+    <div id="score-display" class="score-display">Score: 0</div>
+    <div id="leaderboard" class="leaderboard"></div>
+</div>
 <div id="reset-overlay" class="reset-overlay">
     <div class="reset-content">
-        <p>Collision! Reset game?</p>
+        <p id="collision-text">Collision! Reset game?</p>
+        <input id="name-input" placeholder="Enter your name" />
+        <button id="submit-score" class="btn btn-secondary">Submit Score</button>
         <button id="reset-button" class="btn btn-primary">Reset</button>
     </div>
 </div>
