@@ -15,8 +15,9 @@ window.carGame = {
         let lastSpawn = 0;
 
         function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = window.innerHeight - rect.top;
             laneWidth = canvas.width / laneCount;
             carWidth = laneWidth * 0.6;
             carHeight = carWidth * 1.2;
