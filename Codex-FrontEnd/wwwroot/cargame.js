@@ -14,6 +14,7 @@ window.carGame = {
         const enemies = [];
         let lastSpawn = 0;
         let lastSpawnLane = Math.floor(Math.random() * laneCount);
+        let repeatLane = false;
 
         function resize() {
             const rect = canvas.getBoundingClientRect();
@@ -69,6 +70,13 @@ window.carGame = {
             const isTruck = Math.random() < 0.1; // rare truck
             const height = isTruck ? carHeight * 1.5 : carHeight;
             enemies.push({ lane: lastSpawnLane, y: -height, type: isTruck ? 'truck' : 'car', height: height });
+
+            if (repeatLane) {
+                repeatLane = false;
+            } else {
+                lastSpawnLane = Math.floor(Math.random() * laneCount);
+                repeatLane = true;
+            }
         }
 
         function update(delta) {
